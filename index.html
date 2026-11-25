@@ -21,7 +21,7 @@ label{display:block;margin-bottom:5px;font-size:.8rem;color:var(--mu)}.f{margin-
 .brand{display:flex;align-items:center;gap:12px}.brand h2{font-size:1.15rem}
 /* auth */
 .auth{display:flex;min-height:100vh}.af{flex:1;background:var(--deep);display:flex;justify-content:center;align-items:center;padding:40px}
-.ab{width:100%;max-width:430px}.ab .brand{margin-bottom:30px;gap:16px}.ab .brand h2{font-size:1.7rem;line-height:1.2}.ab .lg{width:60px;height:60px;font-size:1.8rem}
+.ab{width:100%;max-width:430px}.ab .brand{margin-bottom:30px;gap:16px}.ab .brand h2{font-size:2.5rem;line-height:1.15;font-weight:800}.ab .lg{width:60px;height:60px;font-size:1.8rem}
 .ab h1{font-size:2rem;margin-bottom:6px}.sub{color:var(--mu);margin-bottom:20px}
 .tg{display:flex;background:var(--card);padding:4px;border-radius:10px;margin-bottom:20px;border:1px solid var(--ln)}
 .tg button{flex:1;padding:10px;border:none;background:none;color:var(--mu);font-weight:600;border-radius:8px}.tg .on{background:var(--pr);color:#fff}
@@ -77,6 +77,13 @@ label{display:block;margin-bottom:5px;font-size:.8rem;color:var(--mu)}.f{margin-
 .md form{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:22px;width:100%;max-width:560px;max-height:94vh;overflow-y:auto}.md h2{margin-bottom:16px;font-size:1.2rem}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}.ma{display:flex;gap:8px;justify-content:flex-end;margin-top:6px}.ma .l{margin-right:auto}
 .toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--sc);padding:11px 16px;border-radius:8px;z-index:50}
+.ava{width:38px;height:38px;flex:none;border-radius:50%;background:linear-gradient(135deg,var(--pr),var(--sc));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:.85rem;overflow:hidden}
+.ava img{width:100%;height:100%;object-fit:cover}.ava.xl{width:128px;height:128px;font-size:2.4rem;margin:0 auto 14px;border:3px solid var(--ln)}
+.pg{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}.pg .card{margin-bottom:18px}.pc{text-align:center}.pc h2{font-size:1.3rem}.pc .sm{color:var(--mu);font-size:.85rem;margin-top:4px}
+.kv{text-align:left;margin-top:14px;font-size:.88rem}.kv div{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-top:1px solid var(--ln)}.kv span{color:var(--mu)}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tile{background:#0f172a;border:1px solid var(--ln);border-radius:10px;padding:12px}.tile b{font-size:1.4rem;display:block}.tile small{color:var(--mu);font-size:.75rem}
+.gl{margin-top:12px;font-size:.82rem;color:var(--mu)}.gl .bar{width:100%;margin-top:6px}.ph{display:flex;gap:8px;justify-content:center;margin-top:6px;flex-wrap:wrap}
+@media(max-width:900px){.pg{grid-template-columns:1fr}}
 @media(max-width:1024px){.av{display:none}}
 @media(max-width:760px){.app{flex-direction:column}.sb{width:100%;height:auto;position:static;padding:12px}.pomo,.me{display:none}.nav{display:flex;gap:6px;margin:8px 0 0;overflow-x:auto}.nav button{width:auto;white-space:nowrap}.main{padding:16px 12px}.g2,.g3{grid-template-columns:1fr}.row{flex-direction:column}}
 @media(prefers-reduced-motion:reduce){.caret{animation:none}}
@@ -106,10 +113,11 @@ label{display:block;margin-bottom:5px;font-size:.8rem;color:var(--mu)}.f{margin-
       <button data-v="list" onclick="go('list')"><i class="fa-solid fa-list-check"></i> All plans</button>
       <button data-v="notes" onclick="go('notes')"><i class="fa-regular fa-note-sticky"></i> Study notes</button>
       <button data-v="subj" onclick="go('subj')"><i class="fa-solid fa-layer-group"></i> By subject</button>
+      <button data-v="profile" onclick="go('profile')"><i class="fa-regular fa-id-card"></i> My profile</button>
       <button data-v="admin" id="nav-admin" class="hidden" onclick="go('admin')"><i class="fa-solid fa-user-shield"></i> Admin</button>
     </nav>
     <div class="pomo"><div class="h"><span>Focus timer</span><button id="pm-m" onclick="pmMode()">Focus 25</button></div><div class="ring" id="pm-r"><b id="pm-t">25:00</b></div><div class="bt"><button id="pm-g" onclick="pmGo()">Start</button><button onclick="pmReset()">Reset</button></div></div>
-    <div class="me"><div><b id="u-n"></b><br><span class="role" id="u-r"></span></div><button class="btn g s" onclick="logout()" aria-label="Log out"><i class="fa-solid fa-right-from-bracket"></i></button></div>
+    <div class="me"><div style="display:flex;gap:10px;align-items:center;cursor:pointer;min-width:0" onclick="go('profile')" title="My profile"><span class="ava" id="u-a"></span><div style="min-width:0"><b id="u-n"></b><br><span class="role" id="u-r"></span></div></div><button class="btn g s" onclick="logout()" aria-label="Log out"><i class="fa-solid fa-right-from-bracket"></i></button></div>
   </aside>
   <main class="main">
     <div class="top"><div><h1 id="vt">Calendar</h1><p><span id="gr"></span><span class="clk" id="ck"></span></p></div><div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap"><div class="pill hidden" id="nx"></div><button class="btn" onclick="openPlan()"><i class="fa-solid fa-plus"></i> New plan</button></div></div>
@@ -149,16 +157,16 @@ async function doAuth(e){e.preventDefault();$('a-x').textContent='';const b={ema
   try{const d=await api(mode==='login'?'/auth/login':'/auth/register',{method:'POST',body:JSON.stringify(b)});localStorage.setItem('token',d.token);await start(d.user)}catch(x){$('a-x').textContent=x.message}}
 function logout(){try{localStorage.removeItem('token')}catch{}location.reload()}
 async function start(u){user=u;clearInterval(rain);$('auth').classList.add('hidden');$('app').classList.remove('hidden');
-  $('u-n').textContent=u.name;$('u-r').textContent=u.role;$('nav-admin').classList.toggle('hidden',!admin());await load();go('cal');clock();ckT=setInterval(clock,1000)}
+  $('u-n').textContent=u.name;$('u-r').textContent=u.role;$('nav-admin').classList.toggle('hidden',!admin());await load();try{prof=await api('/profile/'+u.id)}catch{prof=u}setAva();go('cal');clock();ckT=setInterval(clock,1000)}
 async function load(){try{plans=await api('/study-plans'+(admin()?'?all=1':''));if(admin())users=await api('/admin/users')}catch(e){toast(e.message)}}
 function clock(){const d=new Date(),h=d.getHours();$('gr').textContent=(h<12?'Good morning':h<18?'Good afternoon':'Good evening')+', '+user.name.split(' ')[0]+'.';$('ck').textContent=d.toLocaleTimeString();nextS()}
 
 /* views */
-const TITLES={cal:'Calendar',list:'All plans',notes:'Study notes',subj:'By subject',admin:'Admin panel'};
-function go(v){view=v;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));$('vt').textContent=TITLES[v];render()}
+const TITLES={cal:'Calendar',list:'All plans',notes:'Study notes',subj:'By subject',admin:'Admin panel',profile:'My profile'};
+function go(v,keep){if(v==='profile'&&!keep)pid=user.id;view=v;const other=v==='profile'&&pid!==user.id;document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===(other?'admin':v)));$('vt').textContent=other?'Student profile':TITLES[v];render()}
 function render(){const d=plans.filter(p=>p.status==='Completed').length,pc=plans.length?Math.round(d/plans.length*100):0;
   $('stats').innerHTML=`<span><b>${plans.length}</b> plans</span><span><b>${plans.length-d}</b> in progress</span><span><b>${d}</b> completed</span><div class="bar"><i style="width:${pc}%"></i></div><span><b>${pc}%</b></span>`+(admin()?'<span><i class="fa-solid fa-user-shield"></i> Showing all students</span>':'');
-  nextS();({cal:rCal,list:rList,notes:rNotes,subj:rSubj,admin:rAdmin})[view]()}
+  nextS();({cal:rCal,list:rList,notes:rNotes,subj:rSubj,admin:rAdmin,profile:rProfile})[view]()}
 function nextS(){const b=$('nx'),n=Date.now();const u=plans.filter(p=>p.status!=='Completed').map(p=>({p,s:new Date(p.study_date+'T'+p.start_time),e:new Date(p.study_date+'T'+p.end_time)})).filter(x=>x.e>n).sort((a,b)=>a.s-b.s)[0];
   if(!u){b.classList.add('hidden');return}const live=u.s<=n,ms=u.s-n,d=Math.floor(ms/864e5);
   b.innerHTML=`${live?'Now':'Next'}: <strong>${esc(u.p.subject)}</strong> <b>${live?'in session':(d?d+'d ':'')+pad(Math.floor(ms%864e5/36e5))+':'+pad(Math.floor(ms%36e5/6e4))+':'+pad(Math.floor(ms%6e4/1e3))}</b>`;b.classList.remove('hidden')}
@@ -194,7 +202,7 @@ function nrows(){const q=F.n.toLowerCase(),l=plans.filter(p=>!q||(p.subject+' '+
   $('rows').innerHTML=l.length?l.map(p=>`<div class="row ${p.priority}" style="background:#0f172a"><div style="flex:1"><h4>${esc(p.subject)}: ${esc(p.topic)}</h4><div class="tg2">${meta(p)}</div>${p.notes?`<div class="note">${esc(p.notes)}</div>`:`<p style="margin:8px 0 0">${p.status==='Completed'?'Studied this? Add a note.':'No notes yet.'}</p>`}</div><div class="acts"><button class="btn g s" onclick="openPlan(${p.id},{n:1})"><i class="fa-regular fa-pen-to-square"></i> ${p.notes?'Edit':'Write'} note</button></div></div>`).join(''):'<p class="em">Nothing here yet.</p>'}
 function rSubj(){const g={};plans.forEach(p=>(g[p.subject]=g[p.subject]||[]).push(p));
   $('v').innerHTML=Object.keys(g).length?`<div class="cats">${Object.entries(g).map(([s,a])=>{const d=a.filter(p=>p.status==='Completed').length;return `<div class="card"><h3>${esc(s)}</h3><p style="color:var(--mu);font-size:.85rem;margin:4px 0 10px">${d} of ${a.length} done</p><div class="bar" style="width:100%"><i style="width:${Math.round(d/a.length*100)}%"></i></div></div>`}).join('')}</div>`:'<p class="em">Add a plan to see subjects.</p>'}
-function rAdmin(){$('v').innerHTML=`<div class="card"><table><tr><th>Name</th><th>Email</th><th>Role</th><th>Plans</th><th>Joined</th><th></th></tr>${users.map(u=>`<tr><td>${esc(u.name)}</td><td>${esc(u.email)}</td><td><select onchange="setRole(${u.id},this.value)" ${u.id===user.id?'disabled':''}><option${u.role==='user'?' selected':''}>user</option><option${u.role==='admin'?' selected':''}>admin</option></select></td><td>${u.plans}</td><td>${u.created_at}</td><td>${u.id===user.id?'<small style="color:var(--mu)">you</small>':`<button class="btn r s" onclick="delUser(${u.id},'${esc(u.name).replace(/'/g,'')}')"><i class="fa-solid fa-trash"></i></button>`}</td></tr>`).join('')}</table></div>`}
+function rAdmin(){$('v').innerHTML=`<div class="card"><table><tr><th>Name</th><th>Email</th><th>Role</th><th>Plans</th><th>Joined</th><th></th></tr>${users.map(u=>`<tr><td><button class="btn g s" onclick="viewUser(${u.id})" title="View profile">${esc(u.name)}</button></td><td>${esc(u.email)}</td><td><select onchange="setRole(${u.id},this.value)" ${u.id===user.id?'disabled':''}><option${u.role==='user'?' selected':''}>user</option><option${u.role==='admin'?' selected':''}>admin</option></select></td><td>${u.plans}</td><td>${u.created_at}</td><td>${u.id===user.id?'<small style="color:var(--mu)">you</small>':`<button class="btn r s" onclick="delUser(${u.id},'${esc(u.name).replace(/'/g,'')}')"><i class="fa-solid fa-trash"></i></button>`}</td></tr>`).join('')}</table></div>`}
 async function setRole(id,role){try{await api('/admin/users/'+id,{method:'PUT',body:JSON.stringify({role})});toast('Role updated');await load();rAdmin()}catch(e){toast(e.message);rAdmin()}}
 async function delUser(id,n){if(!confirm(`Delete ${n} and all their plans?`))return;try{await api('/admin/users/'+id,{method:'DELETE'});await load();render();toast('User deleted')}catch(e){toast(e.message)}}
 
@@ -220,6 +228,42 @@ function pmStop(){clearInterval(pm.i);pm.i=null}
 function pmGo(){if(pm.i){pmStop()}else{const e=Date.now()+pm.l*1000;pm.i=setInterval(()=>{pm.l=Math.max(0,Math.round((e-Date.now())/1000));if(!pm.l){pmStop();toast(pm.m==='focus'?'Focus session done. Take a break, then write your notes!':'Break over.');pmMode()}pmDraw()},250)}pmDraw()}
 function pmMode(){pmStop();pm.m=pm.m==='focus'?'break':'focus';pm.t=pm.l=pm.m==='focus'?1500:300;pmDraw()}
 function pmReset(){pmStop();pm.l=pm.t;pmDraw()}pmDraw();
+
+
+/* student profile */
+let prof=null,pid=null;
+const ini=n=>(n||'?').trim().split(/\s+/).slice(0,2).map(w=>w[0]).join('').toUpperCase(),avaH=p=>p&&p.avatar?`<img src="${esc(p.avatar)}" alt="">`:esc(ini(p&&p.name));
+function setAva(){$('u-a').innerHTML=avaH(prof);$('u-n').textContent=user.name}
+function viewUser(id){pid=id;go('profile',true)}
+async function rProfile(){$('v').innerHTML='<p class="em">Loading profile...</p>';let P;try{P=await api('/profile/'+pid)}catch(e){$('v').innerHTML='<p class="em">'+esc(e.message)+'</p>';return}
+  const own=pid===user.id,mine=plans.filter(p=>p.user_id===pid),done=mine.filter(p=>p.status==='Completed'),dur=p=>(mins(p.end_time)-mins(p.start_time))/60,sum=a=>a.reduce((t,p)=>t+dur(p),0);
+  const w0=new Date();w0.setHours(0,0,0,0);w0.setDate(w0.getDate()-w0.getDay());const wh=sum(done.filter(p=>p.study_date>=ymd(w0))),ds=new Set(done.map(p=>p.study_date));
+  let st=0,d=new Date();if(!ds.has(ymd(d)))d.setDate(d.getDate()-1);while(ds.has(ymd(d))){st++;d.setDate(d.getDate()-1)}
+  const gp=P.weekly_hours?Math.min(100,Math.round(wh/P.weekly_hours*100)):0,days=P.exam_date?Math.ceil((new Date(P.exam_date+'T00:00')-Date.now())/864e5):null;
+  const kv=[['Student ID',P.student_id],['Program',P.program],['Year',P.year_level],['Phone',P.phone],['Email',P.email],['Joined',P.created_at]].filter(x=>x[1]).map(x=>`<div><span>${x[0]}</span><b>${esc(x[1])}</b></div>`).join('');
+  const f=(id,l,v,ex='')=>`<div class="f"><label for="pr-${id}">${l}</label><input id="pr-${id}" value="${esc(v)}" ${ex}></div>`;
+  const left=`<div><div class="card pc"><div class="ava xl">${avaH(P)}</div><h2>${esc(P.name)}</h2><span class="role">${P.role}</span>
+    ${P.goal?`<p class="sm"><i class="fa-solid fa-bullseye"></i> ${esc(P.goal)}${days!==null?` · ${days>0?days+' days left':days===0?'exam today':'exam date passed'}`:''}</p>`:''}
+    ${own?`<div class="ph"><label class="btn g s" style="margin:0;cursor:pointer;color:var(--tx)"><i class="fa-solid fa-camera"></i> Change photo<input type="file" accept="image/*" class="hidden" onchange="pickAva(this)"></label>${P.avatar?'<button class="btn r s" onclick="saveAva(\'\')">Remove</button>':''}</div>`:''}
+    <div class="kv">${kv}</div></div>
+    <div class="card"><div class="tiles"><div class="tile"><b>${mine.length}</b><small>Total plans</small></div><div class="tile"><b>${done.length}</b><small>Completed</small></div><div class="tile"><b>${Math.round(sum(done)*10)/10}h</b><small>Hours studied</small></div><div class="tile"><b>${st}${st?' 🔥':''}</b><small>Day streak</small></div><div class="tile"><b>${mine.filter(p=>p.notes).length}</b><small>Notes written</small></div><div class="tile"><b>${Math.round(wh*10)/10}h</b><small>This week</small></div></div>
+    ${P.weekly_hours?`<div class="gl">Weekly goal: ${Math.round(wh*10)/10} of ${P.weekly_hours} hours<div class="bar"><i style="width:${gp}%"></i></div></div>`:''}</div></div>`;
+  const right=own?`<div><form class="card" onsubmit="saveProf(event)"><h3 style="margin-bottom:14px">Edit profile</h3>
+    <div class="g2">${f('name','Full name',P.name,'required maxlength=100')}${f('sid','Student ID',P.student_id||'','maxlength=40')}</div>
+    <div class="g2">${f('phone','Phone',P.phone||'','maxlength=30')}<div class="f"><label for="pr-year">Year</label><select id="pr-year">${['','Year 1','Year 2','Year 3','Year 4','Graduate'].map(y=>`<option${(P.year_level||'')===y?' selected':''}>${y}</option>`).join('')}</select></div></div>
+    <div class="f"><label for="pr-prog">Program / major</label><input id="pr-prog" list="progs" value="${esc(P.program||'')}" maxlength="100" placeholder="Network Administration"><datalist id="progs"><option>Network Administration</option><option>Cybersecurity</option><option>System Administration</option><option>Software Development</option></datalist></div>
+    <div class="g3">${f('goal','Certification goal',P.goal||'','maxlength=150 placeholder="CCNA 200-301"')}<div class="f"><label for="pr-exam">Exam date</label><input type="date" id="pr-exam" value="${esc(P.exam_date||'')}"></div><div class="f"><label for="pr-hrs">Weekly goal (hours)</label><input type="number" id="pr-hrs" min="0" max="100" value="${P.weekly_hours??''}"></div></div>
+    <div class="f"><label for="pr-bio">About me</label><textarea id="pr-bio" rows="3" maxlength="1000" placeholder="Tell us about your goals...">${esc(P.bio||'')}</textarea></div><div class="ma"><button class="btn">Save profile</button></div></form>
+    <form class="card" onsubmit="savePw(event)"><h3 style="margin-bottom:14px">Change password</h3><div class="g3"><div class="f"><label for="pw-c">Current</label><input type="password" id="pw-c" required></div><div class="f"><label for="pw-n">New (6+ characters)</label><input type="password" id="pw-n" required minlength="6"></div><div class="f"><label for="pw-r">Repeat new</label><input type="password" id="pw-r" required></div></div><div class="ma"><button class="btn g">Update password</button></div></form></div>`
+   :`<div><div class="card"><h3 style="margin-bottom:10px">About</h3><p style="white-space:pre-wrap;color:var(--mu)">${esc(P.bio)||'No bio yet.'}</p>${admin()?'<div class="ma"><button class="btn g" onclick="go(\'admin\')">← Back to admin</button></div>':''}</div></div>`;
+  $('v').innerHTML=`<div class="pg">${left}${right}</div>`}
+async function saveProf(e){e.preventDefault();const g=i=>$('pr-'+i).value;
+  try{const P=await api('/profile',{method:'PUT',body:JSON.stringify({name:g('name'),student_id:g('sid'),phone:g('phone'),year_level:g('year'),program:g('prog'),goal:g('goal'),exam_date:g('exam'),weekly_hours:g('hrs'),bio:g('bio')})});
+    user.name=P.name;prof=P;setAva();clock();toast('Profile saved');rProfile()}catch(x){toast(x.message)}}
+async function savePw(e){e.preventDefault();if($('pw-n').value!==$('pw-r').value)return toast('New passwords do not match');
+  try{await api('/profile/password',{method:'PUT',body:JSON.stringify({current:$('pw-c').value,password:$('pw-n').value})});e.target.reset();toast('Password changed')}catch(x){toast(x.message)}}
+async function saveAva(a){try{prof=await api('/profile',{method:'PUT',body:JSON.stringify({avatar:a})});setAva();toast(a?'Photo updated':'Photo removed');rProfile()}catch(x){toast(x.message)}}
+function pickAva(inp){const f=inp.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement('canvas'),s=256,m=Math.min(im.width,im.height);c.width=c.height=s;c.getContext('2d').drawImage(im,(im.width-m)/2,(im.height-m)/2,m,m,0,0,s,s);saveAva(c.toDataURL('image/jpeg',.85))};im.onerror=()=>toast('That file is not an image');im.src=r.result};r.readAsDataURL(f);inp.value=''}
 
 /* login screen effects */
 (function(){const red=matchMedia('(prefers-reduced-motion: reduce)').matches;if(red)return;const c=$('rain'),x=c.getContext('2d'),ch='01<>/{}[]$#%&*=+ABCDEF';let d;
