@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IT Study Hub</title>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+<style>
+:root{--primary:#6366f1;--secondary:#06b6d4;--bg:#0f172a;--card:#1e293b;--deep:#0b0f19;--text:#f8fafc;--muted:#94a3b8;--line:#334155;--ok:#10b981;--bad:#ef4444;--warn:#f59e0b}
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Inter',system-ui,sans-serif}
+body{background:var(--bg);color:var(--text);min-height:100vh}
+.hidden{display:none!important}
+button{cursor:pointer;font-family:inherit}
+:focus-visible{outline:2px solid var(--secondary);outline-offset:2px}
+
+/* Auth */
+.auth{display:flex;min-height:100vh}
+.auth-form{flex:1;background:var(--deep);display:flex;justify-content:center;align-items:center;padding:40px}
+.auth-box{width:100%;max-width:440px}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:28px}
+.brand i{font-size:1.6rem;color:var(--secondary);background:rgba(6,182,212,.15);padding:12px;border-radius:12px;border:1px solid rgba(6,182,212,.3)}
+.brand h2{font-size:1.15rem;line-height:1.3}
+.auth .brand{gap:16px;margin-bottom:34px}
+.auth .brand i{font-size:2.2rem;padding:18px;border-radius:14px}
+.auth .brand h2{font-size:1.9rem;line-height:1.2;letter-spacing:-.3px}
+.auth h1{font-size:2rem;margin-bottom:6px}
+.sub{color:var(--muted);font-size:.95rem;margin-bottom:22px}
+.toggle{display:flex;background:var(--card);padding:4px;border-radius:10px;margin-bottom:22px;border:1px solid var(--line)}
+.toggle button{flex:1;padding:10px;border:none;background:none;color:var(--muted);font-weight:600;border-radius:8px}
+.toggle button.active{background:var(--primary);color:#fff}
+.field{margin-bottom:16px}
+.field label{display:block;margin-bottom:6px;font-size:.85rem;color:var(--muted)}
+input,select,textarea{width:100%;padding:11px 14px;background:var(--card);border:1px solid var(--line);border-radius:8px;color:#fff;font-size:.95rem}
+input:focus,select:focus,textarea:focus{border-color:var(--secondary);outline:none}
+.err{color:var(--bad);font-size:.85rem;margin-bottom:12px;min-height:1em}
+.btn{width:100%;padding:13px;background:linear-gradient(135deg,var(--primary),var(--secondary));border:none;border-radius:8px;color:#fff;font-weight:600;font-size:1rem}
+.btn:hover{filter:brightness(1.1)}
+.btn.ghost{background:none;border:1px solid var(--line);color:var(--text);width:auto;padding:9px 14px;font-size:.85rem}
+.auth-visual{flex:1;background:linear-gradient(rgba(15,23,42,.75),rgba(15,23,42,.92)),url('https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?q=80&w=1600&auto=format&fit=crop') center/cover,#111827;display:flex;flex-direction:column;justify-content:flex-end;padding:60px;border-left:1px solid var(--line)}
+.auth-visual .status{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.9rem;color:var(--ok);margin-bottom:14px}
+.auth-visual .status i{font-size:.55rem;margin-right:8px;vertical-align:middle}
+.auth-visual h2{font-size:3.4rem;line-height:1.1;letter-spacing:-1px;margin-bottom:16px;max-width:560px}
+.auth-visual p{font-size:1.1rem}
+.auth-visual p{color:var(--muted);line-height:1.6;max-width:480px}
+.pills{display:flex;gap:10px;margin-top:26px;flex-wrap:wrap}
+.pills span{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);padding:8px 14px;border-radius:8px;font-size:.85rem;color:#cbd5e1}
+
+/* Dashboard */
+.layout{display:flex;min-height:100vh}
+.sidebar{width:250px;background:var(--deep);border-right:1px solid var(--line);display:flex;flex-direction:column;padding:22px}
+.menu{list-style:none;margin-top:10px}
+.menu button{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;margin-bottom:6px;background:none;border:none;color:var(--muted);border-radius:8px;font-weight:500;font-size:.95rem;text-align:left}
+.menu button.active,.menu button:hover{background:rgba(99,102,241,.15);color:var(--secondary)}
+.me{margin-top:auto;padding-top:18px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.me small{color:var(--muted);display:block;font-size:.75rem;word-break:break-all}
+.main{flex:1;padding:30px 36px;min-width:0}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:24px}
+.top h1{font-size:1.7rem}
+.top p{color:var(--muted);font-size:.9rem}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:16px;margin-bottom:20px}
+.stat{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:12px}
+.stat b{font-size:1.7rem;display:block}
+.stat span{color:var(--muted);font-size:.85rem}
+.bar{height:8px;background:#0f172a;border-radius:99px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--primary),var(--secondary));transition:width .4s}
+.grid{display:grid;grid-template-columns:1fr 340px;gap:22px;align-items:start}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:22px}
+.card h2{font-size:1.1rem;margin-bottom:16px}
+.filters{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+.filters input{flex:1;min-width:140px}
+.filters select{width:auto}
+.plan{background:#0f172a;border:1px solid var(--line);border-left:4px solid var(--secondary);border-radius:8px;padding:14px;margin-bottom:10px;display:flex;justify-content:space-between;gap:12px}
+.plan.High{border-left-color:var(--bad)}.plan.Medium{border-left-color:var(--warn)}.plan.Low{border-left-color:var(--ok)}
+.plan.done h4{text-decoration:line-through;opacity:.6}
+.plan h4{color:var(--secondary);margin-bottom:4px}
+.plan p{color:var(--muted);font-size:.9rem;margin-bottom:8px}
+.tags{display:flex;gap:12px;flex-wrap:wrap;font-size:.8rem;color:#cbd5e1}
+.tag-bad{color:var(--bad);font-weight:700}
+.acts{display:flex;gap:6px;align-items:flex-start}
+.acts button{padding:7px 10px;border:none;border-radius:6px;font-size:.8rem;font-weight:600;background:rgba(255,255,255,.08);color:var(--text)}
+.acts .ok{background:rgba(16,185,129,.2);color:var(--ok)}
+.acts .del{background:rgba(239,68,68,.2);color:var(--bad)}
+.empty{color:var(--muted);padding:24px 0;text-align:center}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.row2{display:flex;gap:10px}
+.toast{position:fixed;bottom:22px;right:22px;background:var(--card);border:1px solid var(--secondary);padding:12px 18px;border-radius:8px;z-index:9}
+.menu-btn{display:none}
+@media(max-width:1024px){.auth-visual{display:none}.grid{grid-template-columns:1fr}}
+@media(max-width:760px){.layout{flex-direction:column}.sidebar{width:100%;padding:14px}.me{display:none}.menu{display:flex;gap:6px;margin-top:6px}.menu button{margin:0;padding:10px}.main{padding:20px 16px}.plan{flex-direction:column}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+/* ===== Extras: rain, typing, pomodoro, next session, confetti ===== */
+.auth-visual{position:relative;overflow:hidden}
+.auth-visual>*{position:relative;z-index:1}
+.auth-visual>#rain{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.caret{display:inline-block;width:.5ch;height:.85em;background:var(--secondary);margin-left:8px;vertical-align:-.05em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.pw{position:relative}.pw input{padding-right:48px}
+.pw button{position:absolute;right:6px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);padding:8px;font-size:1rem}
+.pw button:hover{color:var(--secondary)}
+.clock{font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--secondary);margin-left:10px;font-size:.9rem}
+.stat,.plan{transition:transform .2s,box-shadow .2s,border-color .2s}
+.stat:hover{border-color:var(--secondary)}
+.plan:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.4)}
+.next{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:linear-gradient(120deg,rgba(99,102,241,.18),rgba(6,182,212,.12));border:1px solid rgba(6,182,212,.35);border-radius:12px;padding:16px 22px;margin-bottom:20px}
+.next small{color:var(--muted);display:block;font-size:.8rem;margin-bottom:2px}
+.next strong{font-size:1.1rem}
+.next .count{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.6rem;color:var(--secondary);font-weight:700}
+.next.now .count{color:var(--ok)}
+.pomo{margin-top:auto;padding:14px;background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:16px;text-align:center}
+.me{margin-top:0}
+.pomo-head{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted);margin-bottom:8px}
+.pomo-head button{background:rgba(6,182,212,.15);color:var(--secondary);border:none;border-radius:6px;padding:4px 10px;font-size:.75rem;font-weight:600}
+.pomo-ring{position:relative;width:120px;height:120px;margin:0 auto 10px}
+.pomo-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pomo-ring circle{fill:none;stroke-width:6}
+.pomo-ring .bg{stroke:#0f172a}
+.pomo-ring .arc{stroke:var(--secondary);stroke-linecap:round;transition:stroke-dashoffset .5s linear}
+.pomo.break .arc{stroke:var(--ok)}
+.pomo-ring b{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.5rem}
+.pomo-btns{display:flex;gap:8px}
+.pomo-btns button{flex:1;padding:8px;border-radius:8px;border:1px solid var(--line);background:none;color:var(--text);font-weight:600;font-size:.85rem}
+.pomo-btns button:first-child{background:var(--primary);border-color:var(--primary)}
+.confetti{position:fixed;width:8px;height:12px;border-radius:2px;pointer-events:none;z-index:99;animation:burst 1.1s ease-out forwards}
+@keyframes burst{to{transform:translate(var(--dx),var(--dy)) rotate(var(--r));opacity:0}}
+@media(max-width:760px){.pomo{display:none}}
+@media(prefers-reduced-motion:reduce){.caret,.confetti{animation:none}.confetti{display:none}}
+</style>
+</head>
+<body>
+
+<!-- AUTH -->
+<div id="auth" class="auth">
+  <div class="auth-form"><div class="auth-box">
+    <div class="brand"><i class="fa-solid fa-microchip"></i><h2>System Network Administration and Cybersecurity Students</h2></div>
+    <h1 id="a-title">Welcome back</h1>
+    <p class="sub" id="a-sub">Sign in to manage your study plans.</p>
+    <div class="toggle">
+      <button id="t-login" class="active" onclick="setMode('login')">Login</button>
+      <button id="t-reg" onclick="setMode('register')">Register</button>
+    </div>
+    <form onsubmit="handleAuth(event)">
+      <div id="f-name" class="field hidden"><label for="a-name">Full name</label><input id="a-name" placeholder="John Doe"></div>
+      <div class="field"><label for="a-email">Email address</label><input type="email" id="a-email" required placeholder="you@example.com"></div>
+      <div class="field"><label for="a-pass">Password</label><div class="pw"><input type="password" id="a-pass" required minlength="6" placeholder="At least 6 characters"><button type="button" onclick="togglePass()" aria-label="Show or hide password"><i id="pw-eye" class="fa-solid fa-eye"></i></button></div></div>
+      <div class="err" id="a-err" role="alert"></div>
+      <button class="btn" id="a-btn">Sign in</button>
+    </form>
+  </div></div>
+  <div class="auth-visual">
+    <canvas id="rain" aria-hidden="true"></canvas>
+    <div class="status"><i class="fa-solid fa-circle"></i> system online</div>
+    <h2><span id="typed">Welcome, Operator</span><span class="caret" aria-hidden="true"></span></h2>
+    <p>Your lab is ready. Log in to review today's queue, track certification progress, and keep every session on schedule.</p>
+    <div class="pills"><span><i class="fa-solid fa-network-wired"></i> CCNA / CCNP</span><span><i class="fa-brands fa-linux"></i> Linux Admin</span><span><i class="fa-solid fa-lock"></i> Security+</span></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="layout hidden">
+  <aside class="sidebar">
+    <div class="brand"><i class="fa-solid fa-terminal"></i><h2>IT Study Hub</h2></div>
+    <ul class="menu">
+      <li><button class="active" data-view="dash" onclick="showView('dash')"><i class="fa-solid fa-chart-pie"></i> Dashboard</button></li>
+      <li><button data-view="cats" onclick="showView('cats')"><i class="fa-solid fa-layer-group"></i> By subject</button></li>
+    </ul>
+    <div class="pomo" id="pomo">
+      <div class="pomo-head"><span>Focus timer</span><button id="pm-mode" onclick="pomoMode()">Focus 25</button></div>
+      <div class="pomo-ring"><svg viewBox="0 0 80 80" aria-hidden="true"><circle class="bg" cx="40" cy="40" r="34"/><circle class="arc" id="pm-arc" cx="40" cy="40" r="34"/></svg><b id="pm-time">25:00</b></div>
+      <div class="pomo-btns"><button id="pm-go" onclick="pomoToggle()">Start</button><button onclick="pomoReset()">Reset</button></div>
+    </div>
+    <div class="me">
+      <div><b id="u-name"></b><small id="u-email"></small></div>
+      <button class="btn ghost" onclick="logout()" aria-label="Log out"><i class="fa-solid fa-right-from-bracket"></i></button>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top">
+      <div><h1 id="v-title">Dashboard</h1><p><span id="greet">Your plans are saved to your account.</span><span class="clock" id="clock"></span></p></div>
+      <div class="tools">
+        <button class="btn ghost" onclick="exportData()"><i class="fa-solid fa-download"></i> Export</button>
+        <button class="btn ghost" onclick="document.getElementById('imp').click()"><i class="fa-solid fa-upload"></i> Import</button>
+        <input type="file" id="imp" accept=".json" class="hidden" onchange="importData(event)">
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><b id="s-total">0</b><span>Total plans</span></div>
+      <div class="stat"><b id="s-prog">0</b><span>In progress</span></div>
+      <div class="stat"><b id="s-done">0</b><span>Completed</span></div>
+      <div class="stat"><b id="s-pct">0%</b><span>Overall progress</span><div class="bar"><i id="s-bar" style="width:0"></i></div></div>
+    </div>
+
+    <div id="next" class="next hidden"></div>
+
+    <div id="view-dash" class="grid">
+      <div class="card">
+        <h2>Study schedule</h2>
+        <div class="filters">
+          <input id="q" placeholder="Search subject or topic" oninput="render()" aria-label="Search">
+          <select id="fs" onchange="render()" aria-label="Filter by status"><option value="">All status</option><option>In Progress</option><option>Completed</option></select>
+          <select id="fp" onchange="render()" aria-label="Filter by priority"><option value="">All priority</option><option>High</option><option>Medium</option><option>Low</option></select>
+        </div>
+        <div id="list"></div>
+      </div>
+
+      <div class="card">
+        <h2 id="form-title">Add study plan</h2>
+        <form id="plan-form" onsubmit="savePlan(event)">
+          <input type="hidden" id="p-id">
+          <div class="field"><label for="p-sub">Subject</label><input id="p-sub" required placeholder="CCNA 200-301"></div>
+          <div class="field"><label for="p-topic">Topic</label><input id="p-topic" required placeholder="OSPF and subnetting"></div>
+          <div class="field"><label for="p-desc">Description</label><textarea id="p-desc" rows="2" placeholder="Configure multi-area OSPF in Packet Tracer"></textarea></div>
+          <div class="field"><label for="p-date">Study date</label><input type="date" id="p-date" required></div>
+          <div class="field"><label>Start and end time</label><div class="row2"><input type="time" id="p-start" required aria-label="Start time"><input type="time" id="p-end" required aria-label="End time"></div></div>
+          <div class="field"><label for="p-pri">Priority</label><select id="p-pri"><option>High</option><option selected>Medium</option><option>Low</option></select></div>
+          <button class="btn" id="p-btn">Save plan</button>
+          <button type="button" class="btn ghost hidden" id="p-cancel" style="margin-top:10px;width:100%" onclick="resetForm()">Cancel edit</button>
+        </form>
+      </div>
+    </div>
+
+    <div id="view-cats" class="cats hidden"></div>
+  </main>
+</div>
+
+<div id="toast" class="toast hidden" role="status"></div>
+
+<script src="config.js"></script>
+<script>
+const $ = id => document.getElementById(id);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let mode = 'login', user = null, plans = [];
+
+/* ---------- API helper (talks to the Express backend) ---------- */
+const getToken = () => { try { return localStorage.getItem('token'); } catch { return null; } };
+async function api(path, opts = {}) {
+  const t = getToken();
+  const res = await fetch((window.API_BASE || '/api') + path, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', ...(t ? { Authorization: 'Bearer ' + t } : {}) }
+  });
+  let data = null; try { data = await res.json(); } catch {}
+  if (res.status === 401 && !path.startsWith('/auth/')) { logout(); throw new Error('Session expired'); }
+  if (!res.ok) throw new Error((data && data.message) || 'Request failed');
+  return data;
+}
+function toast(msg){
+  const t = $('toast'); t.textContent = msg; t.classList.remove('hidden');
+  clearTimeout(toast.t); toast.t = setTimeout(() => t.classList.add('hidden'), 2500);
+}
+
+/* ---------- Auth ---------- */
+function setMode(m){
+  mode = m; const login = m === 'login';
+  $('t-login').classList.toggle('active', login);
+  $('t-reg').classList.toggle('active', !login);
+  $('f-name').classList.toggle('hidden', login);
+  $('a-title').textContent = login ? 'Welcome back' : 'Create your account';
+  $('a-sub').textContent = login ? 'Sign in to manage your study plans.' : 'Register to start your study roadmap.';
+  $('a-btn').textContent = login ? 'Sign in' : 'Create account';
+  $('a-err').textContent = '';
+}
+async function handleAuth(e){
+  e.preventDefault(); $('a-err').textContent = '';
+  const body = { email: $('a-email').value.trim(), password: $('a-pass').value };
+  if (mode === 'register') body.name = $('a-name').value.trim();
+  try {
+    const d = await api(mode === 'login' ? '/auth/login' : '/auth/register', { method: 'POST', body: JSON.stringify(body) });
+    localStorage.setItem('token', d.token);
+    await startApp(d.user);
+  } catch (err) { $('a-err').textContent = err.message; }
+}
+function logout(){ try { localStorage.removeItem('token'); } catch {} location.reload(); }
+
+async function startApp(u){
+  user = u;
+  try { plans = await api('/study-plans'); } catch (err) { plans = []; toast(err.message); }
+  $('auth').classList.add('hidden'); $('app').classList.remove('hidden');
+  setGreeting(u.name); $('u-name').textContent = u.name; $('u-email').textContent = u.email;
+  render();
+}
+
+/* ---------- Plans ---------- */
+async function savePlan(e){
+  e.preventDefault();
+  const id = $('p-id').value;
+  const data = { subject: $('p-sub').value.trim(), topic: $('p-topic').value.trim(), description: $('p-desc').value.trim(), study_date: $('p-date').value, start_time: $('p-start').value, end_time: $('p-end').value, priority: $('p-pri').value };
+  if (data.end_time <= data.start_time) return toast('End time must be after start time');
+  try {
+    if (id) { const p = await api('/study-plans/' + id, { method: 'PUT', body: JSON.stringify(data) }); plans = plans.map(x => x.id == id ? p : x); toast('Plan updated'); }
+    else { plans.push(await api('/study-plans', { method: 'POST', body: JSON.stringify(data) })); toast('Plan added'); }
+    resetForm(); render();
+  } catch (err) { toast(err.message); }
+}
+function editPlan(id){
+  const p = plans.find(x => x.id == id); if (!p) return;
+  $('p-id').value = p.id; $('p-sub').value = p.subject; $('p-topic').value = p.topic; $('p-desc').value = p.description;
+  $('p-date').value = p.study_date; $('p-start').value = p.start_time; $('p-end').value = p.end_time; $('p-pri').value = p.priority;
+  $('form-title').textContent = 'Edit study plan'; $('p-btn').textContent = 'Update plan'; $('p-cancel').classList.remove('hidden');
+  showView('dash'); $('p-sub').focus();
+}
+function resetForm(){
+  $('plan-form').reset(); $('p-id').value = '';
+  $('form-title').textContent = 'Add study plan'; $('p-btn').textContent = 'Save plan'; $('p-cancel').classList.add('hidden');
+}
+async function toggleStatus(id){
+  const p = plans.find(x => x.id == id);
+  try {
+    const upd = await api('/study-plans/' + id, { method: 'PUT', body: JSON.stringify({ status: p.status === 'Completed' ? 'In Progress' : 'Completed' }) });
+    plans = plans.map(x => x.id == id ? upd : x); render();
+    if (upd.status === 'Completed') { const ev = window.event; confetti(ev && ev.clientX, ev && ev.clientY); }
+  } catch (err) { toast(err.message); }
+}
+async function deletePlan(id){
+  if (!confirm('Remove this study plan?')) return;
+  try { await api('/study-plans/' + id, { method: 'DELETE' }); plans = plans.filter(x => x.id != id); render(); toast('Plan removed'); }
+  catch (err) { toast(err.message); }
+}
+
+/* ---------- Render ---------- */
+function render(){
+  const done = plans.filter(p => p.status === 'Completed').length;
+  const pct = plans.length ? Math.round(done / plans.length * 100) : 0;
+  countTo($('s-total'), plans.length); countTo($('s-done'), done);
+  countTo($('s-prog'), plans.length - done); countTo($('s-pct'), pct, '%'); $('s-bar').style.width = pct + '%';
+  renderNext();
+
+  const q = $('q').value.toLowerCase(), fs = $('fs').value, fp = $('fp').value, today = new Date().toISOString().slice(0, 10);
+  const shown = plans.filter(p => (!q || (p.subject + ' ' + p.topic).toLowerCase().includes(q)) && (!fs || p.status === fs) && (!fp || p.priority === fp))
+    .sort((a, b) => (a.study_date + a.start_time).localeCompare(b.study_date + b.start_time));
+
+  $('list').innerHTML = shown.length ? shown.map(p => {
+    const isDone = p.status === 'Completed', late = !isDone && p.study_date < today;
+    return `<div class="plan ${esc(p.priority)} ${isDone ? 'done' : ''}">
+      <div><h4>${esc(p.subject)}: ${esc(p.topic)}</h4>
+      <p>${esc(p.description) || 'No description.'}</p>
+      <div class="tags"><span><i class="fa-regular fa-calendar"></i> ${esc(p.study_date)}</span>
+      <span><i class="fa-regular fa-clock"></i> ${esc(p.start_time)} - ${esc(p.end_time)}</span>
+      <span><i class="fa-solid fa-flag"></i> ${esc(p.priority)}</span>
+      ${late ? '<span class="tag-bad">Overdue</span>' : ''}</div></div>
+      <div class="acts">
+        <button class="ok" onclick="toggleStatus(${p.id})">${isDone ? 'Undo' : 'Done'}</button>
+        <button onclick="editPlan(${p.id})" aria-label="Edit"><i class="fa-solid fa-pen"></i></button>
+        <button class="del" onclick="deletePlan(${p.id})" aria-label="Delete"><i class="fa-solid fa-trash"></i></button>
+      </div></div>`;
+  }).join('') : `<p class="empty">${plans.length ? 'No plans match your filters.' : 'No plans yet. Add your first one on the right.'}</p>`;
+
+  const groups = {};
+  plans.forEach(p => (groups[p.subject] = groups[p.subject] || []).push(p));
+  $('view-cats').innerHTML = Object.keys(groups).length ? Object.entries(groups).map(([s, a]) => {
+    const d = a.filter(p => p.status === 'Completed').length, pc = Math.round(d / a.length * 100);
+    return `<div class="card"><h2>${esc(s)}</h2><span style="color:var(--muted);font-size:.85rem">${d} of ${a.length} done</span><div class="bar"><i style="width:${pc}%"></i></div></div>`;
+  }).join('') : '<p class="empty">Add a plan to see your subjects here.</p>';
+}
+function showView(v){
+  $('view-dash').classList.toggle('hidden', v !== 'dash');
+  $('view-cats').classList.toggle('hidden', v !== 'cats');
+  $('v-title').textContent = v === 'dash' ? 'Dashboard' : 'By subject';
+  document.querySelectorAll('.menu button').forEach(b => b.classList.toggle('active', b.dataset.view === v));
+}
+
+/* ---------- Backup ---------- */
+function exportData(){
+  const blob = new Blob([JSON.stringify(plans, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'study-plans.json'; a.click();
+  URL.revokeObjectURL(a.href);
+}
+function importData(e){
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = async () => {
+    try {
+      const arr = JSON.parse(r.result); if (!Array.isArray(arr)) throw new Error();
+      let n = 0;
+      for (const p of arr) {
+        try { plans.push(await api('/study-plans', { method: 'POST', body: JSON.stringify(p) })); n++; } catch {}
+      }
+      render(); toast(`Imported ${n} of ${arr.length} plans`);
+    } catch { toast('That file is not a valid plans backup'); }
+  };
+  r.readAsText(f); e.target.value = '';
+}
+
+/* ---------- Boot ---------- */
+(async function(){
+  if (!getToken()) return;
+  try { const d = await api('/auth/me'); await startApp(d.user); } catch { try { localStorage.removeItem('token'); } catch {} }
+})();
+
+/* ===== Extras ===== */
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* Code rain behind the welcome panel */
+let rainTimer;
+(function(){
+  const c = $('rain'); if (!c || reduce) return;
+  const ctx = c.getContext('2d'), chars = '01<>/{}[]$#%&*=+ABCDEF';
+  let cols, drops;
+  const size = () => { c.width = c.offsetWidth; c.height = c.offsetHeight; cols = Math.floor(c.width / 18); drops = Array.from({length: cols}, () => Math.random() * -40); };
+  size(); addEventListener('resize', size);
+  rainTimer = setInterval(() => {
+    ctx.globalCompositeOperation = 'destination-out'; ctx.fillStyle = 'rgba(0,0,0,.12)'; ctx.fillRect(0, 0, c.width, c.height);
+    ctx.globalCompositeOperation = 'source-over'; ctx.font = '15px monospace';
+    drops.forEach((y, i) => {
+      ctx.fillStyle = Math.random() > .96 ? '#a7f3d0' : 'rgba(16,185,129,.75)';
+      ctx.fillText(chars[Math.floor(Math.random() * chars.length)], i * 18, y * 18);
+      drops[i] = y * 18 > c.height && Math.random() > .975 ? 0 : y + 1;
+    });
+  }, 60);
+})();
+
+/* Typewriter for the welcome heading */
+(function(){
+  const el = $('typed'); if (!el || reduce) return;
+  const text = el.textContent; el.textContent = ''; let i = 0;
+  setTimeout(function tick(){ el.textContent = text.slice(0, ++i); if (i < text.length) setTimeout(tick, 80); }, 400);
+})();
+
+/* Show / hide password */
+function togglePass(){
+  const i = $('a-pass'), show = i.type === 'password';
+  i.type = show ? 'text' : 'password';
+  $('pw-eye').className = show ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+}
+
+/* Greeting + live clock */
+let clockTimer, userName = '';
+function setGreeting(name){
+  clearInterval(rainTimer); userName = name;
+  const tick = () => {
+    const d = new Date(), h = d.getHours();
+    $('greet').textContent = (h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening') + ', ' + userName.split(' ')[0] + '.';
+    $('clock').textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  };
+  tick(); clearInterval(clockTimer); clockTimer = setInterval(() => { tick(); renderNext(); }, 1000);
+}
+
+/* Animated numbers */
+function countTo(el, to, suf = ''){
+  const from = el._v ?? 0; el._v = to;
+  if (reduce || from === to) { el.textContent = to + suf; return; }
+  const t0 = performance.now();
+  (function step(t){
+    const k = Math.min(1, (t - t0) / 500);
+    el.textContent = Math.round(from + (to - from) * (1 - Math.pow(1 - k, 3))) + suf;
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+
+/* Next session countdown */
+function renderNext(){
+  const box = $('next'), now = Date.now();
+  const up = plans.filter(p => p.status !== 'Completed')
+    .map(p => ({ p, s: new Date(p.study_date + 'T' + p.start_time), e: new Date(p.study_date + 'T' + p.end_time) }))
+    .filter(x => x.e > now).sort((a, b) => a.s - b.s)[0];
+  if (!up) { box.classList.add('hidden'); return; }
+  const live = up.s <= now, ms = up.s - now;
+  const d = Math.floor(ms / 864e5), h = Math.floor(ms % 864e5 / 36e5), m = Math.floor(ms % 36e5 / 6e4), s = Math.floor(ms % 6e4 / 1e3);
+  const txt = live ? 'In session now' : (d ? d + 'd ' : '') + String(h).padStart(2, '0') + ':' + String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  box.className = 'next' + (live ? ' now' : '');
+  box.innerHTML = `<div><small>${live ? 'Current session' : 'Next session'}</small><strong>${esc(up.p.subject)}: ${esc(up.p.topic)}</strong></div><div class="count">${txt}</div>`;
+}
+
+/* Confetti when a plan is completed */
+function confetti(x = innerWidth / 2, y = innerHeight / 3){
+  if (reduce) return;
+  const colors = ['#6366f1', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'];
+  for (let i = 0; i < 28; i++) {
+    const s = document.createElement('i'); s.className = 'confetti';
+    const a = Math.random() * Math.PI * 2, r = 60 + Math.random() * 120;
+    s.style.cssText = `left:${x}px;top:${y}px;background:${colors[i % 5]};--dx:${Math.cos(a) * r}px;--dy:${Math.sin(a) * r + 80}px;--r:${Math.random() * 720}deg`;
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1150);
+  }
+}
+
+/* Pomodoro focus timer */
+const pomo = { mode: 'focus', total: 1500, left: 1500, end: 0, timer: null }, RING = 2 * Math.PI * 34;
+function pomoDraw(){
+  const m = Math.floor(pomo.left / 60), s = pomo.left % 60;
+  $('pm-time').textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  const arc = $('pm-arc'); arc.style.strokeDasharray = RING; arc.style.strokeDashoffset = RING * (1 - pomo.left / pomo.total);
+  $('pomo').classList.toggle('break', pomo.mode === 'break');
+  $('pm-mode').textContent = pomo.mode === 'focus' ? 'Focus 25' : 'Break 5';
+  $('pm-go').textContent = pomo.timer ? 'Pause' : 'Start';
+}
+function pomoStop(){ clearInterval(pomo.timer); pomo.timer = null; }
+function pomoToggle(){
+  if (pomo.timer) { pomoStop(); pomoDraw(); return; }
+  pomo.end = Date.now() + pomo.left * 1000;
+  pomo.timer = setInterval(() => {
+    pomo.left = Math.max(0, Math.round((pomo.end - Date.now()) / 1000));
+    if (pomo.left === 0) { pomoStop(); beep(); toast(pomo.mode === 'focus' ? 'Focus session done. Take a 5 minute break.' : 'Break over. Ready for the next session?'); pomoMode(); }
+    pomoDraw();
+  }, 250); pomoDraw();
+}
+function pomoMode(){
+  pomoStop(); pomo.mode = pomo.mode === 'focus' ? 'break' : 'focus';
+  pomo.total = pomo.left = pomo.mode === 'focus' ? 1500 : 300; pomoDraw();
+}
+function pomoReset(){ pomoStop(); pomo.left = pomo.total; pomoDraw(); }
+function beep(){
+  try { const a = new (window.AudioContext || window.webkitAudioContext)(), o = a.createOscillator(), g = a.createGain();
+    o.connect(g); g.connect(a.destination); o.frequency.value = 880; g.gain.setValueAtTime(.15, a.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001, a.currentTime + .8); o.start(); o.stop(a.currentTime + .8); } catch {}
+}
+pomoDraw();
+</script>
+</body>
+</html>
